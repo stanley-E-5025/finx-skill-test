@@ -1,0 +1,47 @@
+# Django #
+##########
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+media
+
+# Backup files #
+################
+*.bak
+
+# If using Pillow for image processing
+*.jpg
+*.jpeg
+*.png
+
+# If using celery
+celerybeat-schedule
+celerybeat.pid
+
+# Protection against potential leaks
+.env
+
+# IDE - PyCharm #
+##################
+.idea/
+*.iml
+
+# IDE - VSCode #
+################
+.vscode/
+
+# OS generated files #
+######################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Environtment #
+###############
+/venv
