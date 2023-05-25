@@ -19,15 +19,20 @@ class DataSource(ABC):
     def name(self):
         pass
 
+
 class DataSourceDjango(DataSource):
     def __init__(self, name):
         self._name = name
 
     def query(self, **kwargs):
-        return list(Users.objects.using(self._name).filter(
-            Q(first_name__icontains=kwargs['search']) | 
-            Q(last_name__icontains=kwargs['search'])
-        ).values())
+        return list(
+            Users.objects.using(self._name)
+            .filter(
+                Q(first_name__icontains=kwargs["search"])
+                | Q(last_name__icontains=kwargs["search"])
+            )
+            .values()
+        )
 
     @property
     def name(self):
@@ -37,6 +42,7 @@ class DataSourceDjango(DataSource):
     def name(self, name):
         self._name = name
 
+
 def find_user(search_term):
     def query_db(name):
         ds = DataSourceDjango(name)
@@ -44,13 +50,15 @@ def find_user(search_term):
 
     results = {}
     with ThreadPoolExecutor() as executor:
-        future_to_db = {executor.submit(query_db, name): name for name in connections.databases}
+        future_to_db = {
+            executor.submit(query_db, name): name for name in connections.databases
+        }
         for future in as_completed(future_to_db):
             db_name = future_to_db[future]
             try:
                 data = future.result()
             except Exception as exc:
-                logger.debug(f'{db_name} generated an exception: {exc}')
+                logger.debug(f"{db_name} generated an exception: {exc}")
             else:
                 results[db_name] = data
     return results
