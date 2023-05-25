@@ -1,8 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
+from .data_source import find_user
 
-def home_page(request):
-    return HttpResponse("Welcome")
+
 
 def user_details(request, name):
-    return HttpResponse(f"<h1>hello {name}</h1>")
+    user_data = find_user(name)
+    if not user_data:
+        return JsonResponse({'error': 'User not found'}, status=404)
+    return JsonResponse(user_data)
