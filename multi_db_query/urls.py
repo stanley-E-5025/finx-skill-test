@@ -1,4 +1,6 @@
 from django.urls import path
 from . import views
 
-urlpatterns = [path("<str:name>", views.user_details)]
+urlpatterns = [
+    path("", views.user_details, name="user_details"),
+]

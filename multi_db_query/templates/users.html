@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+        color: #333;
+      }
+
+      .card {
+        margin: 1rem 0;
+        padding: 1rem;
+        box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-primary {
+        padding: 0.5rem 1rem;
+        background-color: #0069d9;
+        border-color: #0062cc;
+      }
+
+      .form-control {
+        height: calc(1.5em + 1rem + 2px);
+      }
+    </style>
+
+    <title>User Details</title>
+  </head>
+  <body>
+    <div class="container py-5">
+      <h2 class="mb-5">FinX - Skill Test</h2>
+
+      <p>
+        This project involves setting up a Django application with multiple
+        SQLite databases. We'll create an abstract base class (ABC) called
+        `DataSource` with a `query` method for filtering and a `name` property.
+        We'll then implement a concrete class, `DataSourceDjango`, based on this
+        ABC. This class will filter the Django user model in a specified
+        database. The goal is to perform parallel queries on all databases
+        defined in the settings. The method for achieving this could be async,
+        multiprocessing, threading, or celery, and should be justified in
+        comments. Finally, we'll combine the results from all data sources into
+        a single data structure, with the data source name as the key.
+      </p>
+
+      <form method="POST" action="{% url 'user_details' %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="name" class="form-label">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form-control"
+            placeholder="Enter a name"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+
+      {% if user %}
+      <div class="row mt-5">
+        <div class="col-md-6">
+          <h5 class="mb-3">Results from primary DB</h5>
+          {% for default in user.default %}
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">
+                {{ default.first_name }} {{ default.last_name }}
+              </h5>
+              <p class="card-text">{{ default.email }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="col-md-6">
+          <h5 class="mb-3">Results from secondary DB</h5>
+          {% for secondary in user.secondary %}
+          <div class="card mb-4">
+            <div class="card-body">
+              <h5 class="card-title">
+                {{ secondary.first_name }} {{ secondary.last_name }}
+              </h5>
+              <p class="card-text">{{ secondary.email }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}
+      <p class="mt-3">No user data found.</p>
+      {% endif %}
+    </div>
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Option 2: jQuery, Popper.js, and Bootstrap JS
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> -->
+  </body>
+</html>
